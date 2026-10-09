@@ -1,0 +1,6 @@
+@NutriPulse.Api_HostAddress = http://localhost:5128
+
+GET {{NutriPulse.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

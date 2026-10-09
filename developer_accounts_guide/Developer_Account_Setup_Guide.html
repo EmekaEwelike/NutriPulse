@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Developer Account Setup Guide - Google Play & Apple App Store</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-apple: #38bdf8;
+      --accent-google: #34d399;
+      --border: #334155;
+      --alert-bg: #1e1b4b;
+      --alert-border: #6366f1;
+    }
+
+    @media print {
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
+      .card, .alert-box {
+        border: 1px solid #ccc !important;
+        background: #f9f9f9 !important;
+        color: #000000 !important;
+      }
+      .btn-print {
+        display: none !important;
+      }
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      margin: 0;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      margin: 0;
+      background: linear-gradient(135deg, var(--accent-apple), var(--accent-google));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      margin-top: 6px;
+      font-size: 1.05rem;
+    }
+
+    .btn-print {
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
+      color: #0f172a;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: opacity 0.2s;
+    }
+
+    .btn-print:hover {
+      opacity: 0.9;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 32px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      margin-top: 0;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h2.google { color: var(--accent-google); }
+    h2.apple { color: var(--accent-apple); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      background-color: rgba(255, 255, 255, 0.05);
+      color: #ffffff;
+    }
+
+    .alert-box {
+      background-color: var(--alert-bg);
+      border-left: 4px solid var(--alert-border);
+      padding: 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 20px 0;
+    }
+
+    .alert-title {
+      font-weight: bold;
+      color: #a5b4fc;
+      margin-bottom: 6px;
+    }
+
+    ul, ol {
+      padding-left: 24px;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-right: 8px;
+    }
+
+    .badge-google { background: rgba(52, 211, 153, 0.2); color: var(--accent-google); }
+    .badge-apple { background: rgba(56, 189, 248, 0.2); color: var(--accent-apple); }
+
+    footer {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Developer Account Setup Guide</h1>
+        <div class="subtitle">Google Play Store (Android) & Apple App Store (iOS)</div>
+      </div>
+      <button class="btn-print" onclick="window.print()">Print / Save as PDF</button>
+    </header>
+
+    <!-- Section 1 -->
+    <div class="card">
+      <h2>1. Account Type Selection</h2>
+      <p>Before registering on either platform, choose between an <strong>Individual</strong> or <strong>Organization</strong> account based on your setup:</p>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Individual / Personal</th>
+            <th>Organization / Company</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Target Audience</strong></td>
+            <td>Solo developers, freelancers, hobbyists</td>
+            <td>LLCs, Corporations, Non-profits</td>
+          </tr>
+          <tr>
+            <td><strong>App Store Seller Name</strong></td>
+            <td>Your personal legal name</td>
+            <td>Your official legal business name</td>
+          </tr>
+          <tr>
+            <td><strong>D-U-N-S Number Needed?</strong></td>
+            <td>No</td>
+            <td><strong>Yes</strong> (Free 9-digit business ID)</td>
+          </tr>
+          <tr>
+            <td><strong>Team Roles & Permissions</strong></td>
+            <td>Limited / Single user</td>
+            <td>Full multi-user team role management</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="alert-box">
+        <div class="alert-title">ℹ️ What is a D-U-N-S Number?</div>
+        <div>A D-U-N-S (Data Universal Numbering System) number is a unique 9-digit business identifier provided by Dun & Bradstreet. It is mandatory for Organization accounts. You can obtain it <strong>100% free</strong> from <a href="https://www.dnb.com/" target="_blank" style="color:#a5b4fc;">Dun & Bradstreet</a> (takes 2–7 business days).</div>
+      </div>
+    </div>
+
+    <!-- Section 2: Google Play -->
+    <div class="card">
+      <h2 class="google">2. Google Play Console Setup (Android)</h2>
+      <p><span class="badge badge-google">Fee: $25 USD One-time</span> <span class="badge badge-google">Renewal: $0</span></p>
+      
+      <h3>Prerequisites</h3>
+      <ul>
+        <li>A dedicated Google Account (e.g., <code>developer@yourcompany.com</code>).</li>
+        <li>Credit or Debit Card accepting USD payments.</li>
+        <li>Government-issued Photo ID (Passport, Driver's License).</li>
+        <li>D-U-N-S Number & corporate registration files (Organization only).</li>
+      </ul>
+
+      <h3>Registration Steps</h3>
+      <ol>
+        <li>Go to <a href="https://play.google.com/console/signup" target="_blank" style="color:var(--accent-google);">play.google.com/console/signup</a>.</li>
+        <li>Sign in with your dedicated developer account.</li>
+        <li>Choose <strong>Personal</strong> or <strong>Organization</strong>.</li>
+        <li>Enter developer profile information (Developer Name, Email, Phone).</li>
+        <li>Pay the <strong>$25 USD</strong> one-time registration fee.</li>
+        <li>Complete identity verification by uploading your ID and verifying phone/email.</li>
+      </ol>
+
+      <div class="alert-box" style="border-left-color: #f43f5e; background-color: #2c0b0e;">
+        <div class="alert-title" style="color: #fda4af;">⚠️ Important Testing Rule for Personal Accounts</div>
+        <div style="color: #fecdd3;">Google requires new Personal developer accounts to conduct a closed test with at least <strong>12 to 20 testers for 14 consecutive days</strong> before public app publishing is unlocked. Organization accounts are exempt.</div>
+      </div>
+    </div>
+
+    <!-- Section 3: Apple Developer -->
+    <div class="card">
+      <h2 class="apple">3. Apple Developer Program Setup (iOS)</h2>
+      <p><span class="badge badge-apple">Fee: $99 USD / year</span> <span class="badge badge-apple">Renewal: Annual</span></p>
+
+      <h3>Prerequisites</h3>
+      <ul>
+        <li>Apple Account (Apple ID) with <strong>Two-Factor Authentication (2FA)</strong> enabled.</li>
+        <li>Government-issued Photo ID.</li>
+        <li>D-U-N-S Number, legal entity status, and a working website (Organization only).</li>
+      </ul>
+
+      <h3>Registration Steps</h3>
+      <ol>
+        <li>Download the <strong>Apple Developer app</strong> on iOS/Mac (Recommended for fastest approval) OR visit <a href="https://developer.apple.com/programs/enroll/" target="_blank" style="color:var(--accent-apple);">developer.apple.com/programs/enroll/</a>.</li>
+        <li>Sign in with your Apple Account (2FA required).</li>
+        <li>Select account entity type (Individual or Organization).</li>
+        <li>Complete identity verification (Photo ID for individuals; D-U-N-S + legal authority phone verification for organizations).</li>
+        <li>Pay the <strong>$99 USD/year</strong> enrollment fee.</li>
+      </ol>
+    </div>
+
+    <!-- Section 4: Checklist -->
+    <div class="card">
+      <h2>4. Pre-Registration Checklist</h2>
+      <ul>
+        <li>✔️ Dedicated developer email accounts created.</li>
+        <li>✔️ All details match government ID / legal documents exactly.</li>
+        <li>✔️ Applied for free D-U-N-S number (if registering an Organization).</li>
+        <li>✔️ International payment card ready.</li>
+      </ul>
+    </div>
+
+    <footer>
+      Developer Account Setup Guide • Generated October 2026
+    </footer>
+  </div>
+</body>
+</html>

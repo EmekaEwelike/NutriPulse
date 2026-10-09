@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: nutripulse-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: nutripulsedb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: nutripulse-api
+    restart: always
+    ports:
+      - "5000:8080"
+    environment:
+      - ConnectionStrings__PostgreSQL=Host=postgres;Port=5432;Database=nutripulsedb;Username=postgres;Password=postgres
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
