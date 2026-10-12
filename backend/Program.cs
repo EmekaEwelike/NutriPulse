@@ -1,6 +1,10 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using NutriPulse.Api.Data;
+using Microsoft.IdentityModel.Tokens;
 using Npgsql;
+using NutriPulse.Api.Data;
+using NutriPulse.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +23,29 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod();
     });
 });
+
+// Register HTTP Client and Services
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<IEmailService, ResendEmailService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+
+// Configure JWT Authentication
+var jwtSecret = builder.Configuration["Jwt:Secret"] ?? TokenService.DefaultSecretKey;
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"] ?? "NutriPulse",
+            ValidAudience = builder.Configuration["Jwt:Audience"] ?? "NutriPulseApp",
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret))
+        };
+    });
+builder.Services.AddAuthorization();
 
 // Configure Database Connection
 var postgresConn = builder.Configuration.GetConnectionString("PostgreSQL");
@@ -62,7 +89,10 @@ app.UseSwaggerUI(c =>
 });
 
 app.UseCors("AllowAll");
+
+app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
 
 // Ensure Database Created & Seeded

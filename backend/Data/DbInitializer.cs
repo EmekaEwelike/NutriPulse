@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using NutriPulse.Api.Models;
 
 namespace NutriPulse.Api.Data;
@@ -7,6 +8,72 @@ public static class DbInitializer
     public static void Initialize(NutriPulseDbContext context)
     {
         context.Database.EnsureCreated();
+
+        try
+        {
+            var isPg = context.Database.ProviderName?.Contains("PostgreSQL", StringComparison.OrdinalIgnoreCase) == true
+                    || context.Database.ProviderName?.Contains("Npgsql", StringComparison.OrdinalIgnoreCase) == true;
+
+            if (isPg)
+            {
+                context.Database.ExecuteSqlRaw(@"
+                    CREATE TABLE IF NOT EXISTS ""Users"" (
+                        ""Id"" SERIAL PRIMARY KEY,
+                        ""Email"" VARCHAR(255) NOT NULL UNIQUE,
+                        ""Name"" VARCHAR(255) NOT NULL,
+                        ""PasswordHash"" TEXT,
+                        ""IsEmailConfirmed"" BOOLEAN NOT NULL DEFAULT FALSE,
+                        ""EmailConfirmationCode"" VARCHAR(10),
+                        ""EmailConfirmationCodeExpiry"" TIMESTAMPTZ,
+                        ""PasswordResetCode"" VARCHAR(10),
+                        ""PasswordResetCodeExpiry"" TIMESTAMPTZ,
+                        ""GoogleId"" VARCHAR(255),
+                        ""AuthProvider"" VARCHAR(50) NOT NULL DEFAULT 'local',
+                        ""CreatedAt"" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                        ""UpdatedAt"" TIMESTAMPTZ NOT NULL DEFAULT NOW()
+                    );
+                ");
+            }
+            else
+            {
+                context.Database.ExecuteSqlRaw(@"
+                    CREATE TABLE IF NOT EXISTS ""Users"" (
+                        ""Id"" INTEGER PRIMARY KEY AUTOINCREMENT,
+                        ""Email"" TEXT NOT NULL UNIQUE,
+                        ""Name"" TEXT NOT NULL,
+                        ""PasswordHash"" TEXT,
+                        ""IsEmailConfirmed"" INTEGER NOT NULL DEFAULT 0,
+                        ""EmailConfirmationCode"" TEXT,
+                        ""EmailConfirmationCodeExpiry"" TEXT,
+                        ""PasswordResetCode"" TEXT,
+                        ""PasswordResetCodeExpiry"" TEXT,
+                        ""GoogleId"" TEXT,
+                        ""AuthProvider"" TEXT NOT NULL DEFAULT 'local',
+                        ""CreatedAt"" TEXT NOT NULL,
+                        ""UpdatedAt"" TEXT NOT NULL
+                    );
+                ");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"--> Note on Users table creation: {ex.Message}");
+        }
+
+        if (!context.Users.Any())
+        {
+            context.Users.Add(new User
+            {
+                Email = "alex.morgan@nutripulse.io",
+                Name = "Alex Morgan",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("Password123!"),
+                IsEmailConfirmed = true,
+                AuthProvider = "local",
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            });
+            context.SaveChanges();
+        }
 
         if (!context.UserProfiles.Any())
         {

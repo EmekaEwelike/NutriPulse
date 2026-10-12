@@ -32,8 +32,9 @@ out/
 .env*.local
 *.pem
 secrets.json
-appsettings.Local.json
-appsettings.*.Local.json
+appsettings.json
+appsettings.*.json
+!appsettings.Example.json
 
 # IDEs & Editor configurations
 .vs/

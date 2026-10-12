@@ -145,3 +145,155 @@ export async function logWeightApi(weightVal) {
     newEntry
   );
 }
+
+// -------------------------------------------------------------
+// AUTHENTICATION API
+// -------------------------------------------------------------
+let cachedAuth = null;
+
+export function getStoredAuth() {
+  if (cachedAuth) return cachedAuth;
+  try {
+    if (typeof localStorage !== 'undefined') {
+      const saved = localStorage.getItem('nutripulse_auth');
+      if (saved) {
+        cachedAuth = JSON.parse(saved);
+        return cachedAuth;
+      }
+    }
+  } catch (e) {}
+  return null;
+}
+
+export function saveStoredAuth(authData) {
+  cachedAuth = authData;
+  try {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('nutripulse_auth', JSON.stringify(authData));
+    }
+  } catch (e) {}
+}
+
+export function clearStoredAuth() {
+  cachedAuth = null;
+  try {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.removeItem('nutripulse_auth');
+    }
+  } catch (e) {}
+}
+
+export async function loginApi(email, password) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/Auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await response.json();
+    return { ok: response.ok, status: response.status, ...data };
+  } catch (err) {
+    return { ok: false, success: false, message: 'Server unreachable. Please ensure the backend is running.' };
+  }
+}
+
+export async function registerApi(email, password, name) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/Auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password, name })
+    });
+    const data = await response.json();
+    return { ok: response.ok, status: response.status, ...data };
+  } catch (err) {
+    return { ok: false, success: false, message: 'Server unreachable. Please ensure the backend is running.' };
+  }
+}
+
+export async function verifyEmailApi(email, code) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/Auth/verify-email`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, code })
+    });
+    const data = await response.json();
+    return { ok: response.ok, status: response.status, ...data };
+  } catch (err) {
+    return { ok: false, success: false, message: 'Server unreachable.' };
+  }
+}
+
+export async function resendCodeApi(email) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/Auth/resend-code`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    const data = await response.json();
+    return { ok: response.ok, ...data };
+  } catch (err) {
+    return { ok: false, success: false, message: 'Server unreachable.' };
+  }
+}
+
+export async function googleAuthApi(payload) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/Auth/google`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await response.json();
+    return { ok: response.ok, status: response.status, ...data };
+  } catch (err) {
+    return { ok: false, success: false, message: 'Google Sign-In failed to connect to backend.' };
+  }
+}
+
+export async function changePasswordApi(currentPassword, newPassword, token) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/Auth/change-password`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ currentPassword, newPassword })
+    });
+    const data = await response.json();
+    return { ok: response.ok, status: response.status, ...data };
+  } catch (err) {
+    return { ok: false, success: false, message: 'Server connection failed.' };
+  }
+}
+
+export async function forgotPasswordApi(email) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/Auth/forgot-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    const data = await response.json();
+    return { ok: response.ok, ...data };
+  } catch (err) {
+    return { ok: false, success: false, message: 'Server unreachable.' };
+  }
+}
+
+export async function resetPasswordApi(email, code, newPassword) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/Auth/reset-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, code, newPassword })
+    });
+    const data = await response.json();
+    return { ok: response.ok, status: response.status, ...data };
+  } catch (err) {
+    return { ok: false, success: false, message: 'Server unreachable.' };
+  }
+}

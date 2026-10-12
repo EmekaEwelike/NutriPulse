@@ -2,30 +2,39 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { COLORS } from '../theme';
 
-export default function Header({ profile, onOpenProfile }) {
+export default function Header({ profile, onOpenProfile, authState, onOpenAuth }) {
   const currentDate = new Date().toLocaleDateString('en-US', {
     weekday: 'short',
     month: 'short',
     day: 'numeric'
   });
 
+  const currentUser = authState?.user;
+  const displayName = currentUser?.name || profile?.name || 'Friend';
+
   return (
     <View style={styles.container}>
       <View style={styles.userInfo}>
         <TouchableOpacity style={styles.avatar} onPress={onOpenProfile}>
-          <Text style={styles.avatarText}>{profile.name ? profile.name.charAt(0) : 'A'}</Text>
+          <Text style={styles.avatarText}>{displayName.charAt(0).toUpperCase()}</Text>
         </TouchableOpacity>
         <View style={styles.textContainer}>
-          <Text style={styles.greeting}>Hello, {profile.name || 'User'} 👋</Text>
+          <Text style={styles.greeting}>Hello, {displayName} 👋</Text>
           <Text style={styles.dateText}>{currentDate}</Text>
         </View>
       </View>
 
       <View style={styles.badgeContainer}>
-        <View style={styles.streakBadge}>
-          <Text style={styles.flameIcon}>🔥</Text>
-          <Text style={styles.streakText}>{profile.streakDays || 14}d</Text>
-        </View>
+        {currentUser ? (
+          <View style={styles.streakBadge}>
+            <Text style={styles.flameIcon}>🔥</Text>
+            <Text style={styles.streakText}>{profile.streakDays || 14}d</Text>
+          </View>
+        ) : (
+          <TouchableOpacity style={styles.signInPill} onPress={onOpenAuth}>
+            <Text style={styles.signInPillText}>Sign In</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
@@ -97,5 +106,18 @@ const styles = StyleSheet.create({
     color: COLORS.accent,
     fontWeight: '700',
     fontSize: 14
+  },
+  signInPill: {
+    backgroundColor: 'rgba(16, 185, 129, 0.15)',
+    borderWidth: 1,
+    borderColor: COLORS.primary,
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    borderRadius: 20
+  },
+  signInPillText: {
+    color: COLORS.primaryLight,
+    fontWeight: '700',
+    fontSize: 13
   }
 });

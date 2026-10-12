@@ -6,6 +6,7 @@ import FoodLogger from './src/components/FoodLogger';
 import Analytics from './src/components/Analytics';
 import Profile from './src/components/Profile';
 import Navigation from './src/components/Navigation';
+import AuthModal from './src/components/AuthModal';
 
 import { COLORS } from './src/theme';
 import {
@@ -22,12 +23,18 @@ import {
   getWaterApi,
   logWaterApi,
   getWeightHistoryApi,
-  logWeightApi
+  logWeightApi,
+  getStoredAuth,
+  clearStoredAuth
 } from './src/api';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [logCategoryTarget, setLogCategoryTarget] = useState('all');
+
+  // Authentication State
+  const [authState, setAuthState] = useState(getStoredAuth());
+  const [isAuthModalVisible, setIsAuthModalVisible] = useState(false);
 
   // App State
   const [profile, setProfile] = useState(INITIAL_PROFILE);
@@ -59,6 +66,19 @@ export default function App() {
     }
     loadBackendData();
   }, []);
+
+  // Auth Handlers
+  const handleAuthSuccess = (newAuth) => {
+    setAuthState(newAuth);
+    if (newAuth?.user?.name) {
+      setProfile(prev => ({ ...prev, name: newAuth.user.name }));
+    }
+  };
+
+  const handleLogout = () => {
+    clearStoredAuth();
+    setAuthState(null);
+  };
 
   // Handlers with API Sync
   const handleAddFood = async (foodItem) => {
@@ -99,7 +119,9 @@ export default function App() {
 
       <Header
         profile={profile}
+        authState={authState}
         onOpenProfile={() => setActiveTab('profile')}
+        onOpenAuth={() => setIsAuthModalVisible(true)}
       />
 
       <View style={styles.mainContent}>
@@ -131,7 +153,10 @@ export default function App() {
         {activeTab === 'profile' && (
           <Profile
             profile={profile}
+            authState={authState}
             onUpdateProfile={handleUpdateProfile}
+            onOpenAuth={() => setIsAuthModalVisible(true)}
+            onLogout={handleLogout}
           />
         )}
       </View>
@@ -142,6 +167,12 @@ export default function App() {
           if (tab === 'log') setLogCategoryTarget('all');
           setActiveTab(tab);
         }}
+      />
+
+      <AuthModal
+        visible={isAuthModalVisible}
+        onClose={() => setIsAuthModalVisible(false)}
+        onAuthSuccess={handleAuthSuccess}
       />
     </SafeAreaView>
   );

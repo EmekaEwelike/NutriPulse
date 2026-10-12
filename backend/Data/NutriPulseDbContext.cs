@@ -9,6 +9,7 @@ public class NutriPulseDbContext : DbContext
     {
     }
 
+    public DbSet<User> Users { get; set; } = null!;
     public DbSet<UserProfile> UserProfiles { get; set; } = null!;
     public DbSet<FoodItem> FoodItems { get; set; } = null!;
     public DbSet<LoggedFood> LoggedFoods { get; set; } = null!;
@@ -19,6 +20,8 @@ public class NutriPulseDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.Entity<User>().HasKey(u => u.Id);
+        modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
         modelBuilder.Entity<UserProfile>().HasKey(u => u.Id);
         modelBuilder.Entity<FoodItem>().HasKey(f => f.Id);
         modelBuilder.Entity<LoggedFood>().HasKey(l => l.Id);
